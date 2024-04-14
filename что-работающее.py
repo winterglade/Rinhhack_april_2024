@@ -4,7 +4,7 @@ import os
 
 eml_folder_path = "C:/Users/User/Desktop/hacaton/small"  # путь к папке с файлами EML.
 
-# Разделение фильтров по категориям
+# фильтры:
 filters = {
     'Паспорта': [
         r'\b\d{4}\s\d{6}\b', 
@@ -41,7 +41,7 @@ filters = {
 def search_leaks(eml_file_path, filters):
     leaks = {}
     with open(eml_file_path, 'r', encoding='utf-8') as eml_file:
-        eml_message = email.message_from_file(eml_file)
+        eml_message = email.message_from_file(eml_file)     # преобразует содержжимое файла EML в объект сообщения электронной почты.
         
         for category, category_filters in filters.items():
             category_leaks = []
@@ -71,7 +71,6 @@ def search_leaks(eml_file_path, filters):
             
             if category_leaks:
                 leaks[category] = category_leaks
-                break  # Останавливаемся при первом совпадении
     
     return leaks
 
@@ -85,7 +84,7 @@ def main(eml_folder_path, filters):
             leaks = search_leaks(eml_file_path, filters)
             for category, category_leaks in leaks.items():
                 if category_leaks:
-                    print(f"Утечки в файле {filename}, категория {category}")
+                    print(f"Утечки в файле {filename}, категория {', '.join(category_leaks)}")
                     total_leaks_count[category] += len(category_leaks)  # Увеличиваем счетчик утечек для данной категории
                     total_leaks += len(category_leaks)  # Увеличиваем общий счетчик утечек
 
